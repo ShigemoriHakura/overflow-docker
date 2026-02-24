@@ -1,15 +1,16 @@
 # Overflow Docker 部署指南
 
-[![Docker Pulls](https://img.shields.io/docker/pulls/sdjnmxd/overflow)](https://hub.docker.com/r/sdjnmxd/overflow) [![Docker Stars](https://img.shields.io/docker/stars/sdjnmxd/overflow)](https://hub.docker.com/r/sdjnmxd/overflow) [![Docker Image Size](https://img.shields.io/docker/image-size/sdjnmxd/overflow/latest)](https://hub.docker.com/r/sdjnmxd/overflow) [![Docker Image CI/CD](https://github.com/sdjnmxd/overflow-docker/actions/workflows/docker-publish.yml/badge.svg)](https://github.com/sdjnmxd/overflow-docker/actions/workflows/docker-publish.yml) [![GitHub Stars](https://img.shields.io/github/stars/sdjnmxd/overflow-docker.svg?logo=github)](https://github.com/sdjnmxd/overflow-docker) [![GitHub License](https://img.shields.io/github/license/sdjnmxd/overflow-docker)](https://github.com/sdjnmxd/overflow-docker/blob/main/LICENSE) [![GitHub last commit](https://img.shields.io/github/last-commit/sdjnmxd/overflow-docker)](https://github.com/sdjnmxd/overflow-docker/commits/main)
+[![Docker Pulls](https://img.shields.io/docker/pulls/shigemorihakura/overflow)](https://hub.docker.com/r/shigemorihakura/overflow) [![Docker Stars](https://img.shields.io/docker/stars/shigemorihakura/overflow)](https://hub.docker.com/r/shigemorihakura/overflow) [![Docker Image Size](https://img.shields.io/docker/image-size/shigemorihakura/overflow/latest)](https://hub.docker.com/r/shigemorihakura/overflow) [![Docker Image CI/CD](https://github.com/shigemorihakura/overflow-docker/actions/workflows/docker-publish.yml/badge.svg)](https://github.com/shigemorihakura/overflow-docker/actions/workflows/docker-publish.yml) [![GitHub Stars](https://img.shields.io/github/stars/shigemorihakura/overflow-docker.svg?logo=github)](https://github.com/shigemorihakura/overflow-docker) [![GitHub License](https://img.shields.io/github/license/shigemorihakura/overflow-docker)](https://github.com/shigemorihakura/overflow-docker/blob/main/LICENSE) [![GitHub last commit](https://img.shields.io/github/last-commit/shigemorihakura/overflow-docker)](https://github.com/shigemorihakura/overflow-docker/commits/main)
 
-这是 [Overflow](https://github.com/MrXiaoM/Overflow) 的 Docker 部署配置，提供了一个开箱即用的 Mirai Console + Overflow 容器化部署方案。
-本fork主要将plugins等目录引出，并且预安装libgl依赖
+这是 [Overflow](https://github.com/MrXiaoM/Overflow) 的 Docker 部署配置，提供了一个开箱即用的 Mirai Console + Overflow 容器化部署方案。  
+本fork主要将plugins等目录引出，并且预安装libgl依赖。  
+在某些情况下（比如1panel），需要手动添加全部配置项，不然会报错无法启动
 
 > 🧪 **实验性功能**
 >
 > - ARM64 支持正在开发中！如果您使用 ARM64 设备（如 Apple M1/M2 Mac、树莓派等），可以：
->   - 查看 [ARM64 支持分支](https://github.com/sdjnmxd/overflow-docker/tree/feature/arm64-support)
->   - 下载 [实验性版本](https://github.com/sdjnmxd/overflow-docker/releases?q=arm64&expanded=true)
+>   - 查看 [ARM64 支持分支](https://github.com/shigemorihakura/overflow-docker/tree/feature/arm64-support)
+>   - 下载 [实验性版本](https://github.com/shigemorihakura/overflow-docker/releases?q=arm64&expanded=true)
 >   - 参与测试和反馈
 
 ## 快速开始
@@ -20,8 +21,8 @@
 mkdir overflow && cd overflow
 
 # 下载配置文件
-curl -O https://raw.githubusercontent.com/sdjnmxd/overflow-docker/main/docker-compose.yml
-curl -O https://raw.githubusercontent.com/sdjnmxd/overflow-docker/main/env.example
+curl -O https://raw.githubusercontent.com/shigemorihakura/overflow-docker/main/docker-compose.yml
+curl -O https://raw.githubusercontent.com/shigemorihakura/overflow-docker/main/env.example
 ```
 
 2. 配置必要的环境变量：
@@ -89,20 +90,6 @@ docker compose up -d
 | OVERFLOW_RESOURCE_CACHE_DURATION | 资源缓存保留时间（小时） | 168 |
 | OVERFLOW_DROP_EVENTS_BEFORE_CONNECTED | 是否丢弃连接前的事件 | true |
 
-#### mirai-api-http 配置
-| 环境变量 | 说明 | 默认值 |
-|---------|------|--------|
-| MIRAI_ENABLE_VERIFY | 是否启用验证 | true |
-| MIRAI_VERIFY_KEY | 验证密钥 | StarBot |
-| MIRAI_HTTP_HOST | HTTP 服务监听地址 | 0.0.0.0 |
-| MIRAI_HTTP_PORT | HTTP 服务端口 | 7827 |
-| MIRAI_HTTP_CORS | CORS 配置 | * |
-| MIRAI_WS_HOST | WebSocket 服务监听地址 | 0.0.0.0 |
-| MIRAI_WS_PORT | WebSocket 服务端口 | 7827 |
-| MIRAI_HTTP_DEBUG | 是否启用调试模式 | false |
-| MIRAI_SINGLE_MODE | 是否启用单例模式 | false |
-| MIRAI_WS_SYNC_ID | WebSocket 同步 ID | -1 |
-
 ## 本地构建
 
 如果需要本地构建镜像：
@@ -131,14 +118,14 @@ docker build -t overflow \
 - Mirai Console: 2.16.0
 - BouncyCastle: 1.64
 
-镜像通过 GitHub Actions 自动构建并推送至 [Docker Hub](https://hub.docker.com/r/sdjnmxd/overflow)：
+镜像通过 GitHub Actions 自动构建并推送至 [Docker Hub](https://hub.docker.com/r/shigemorihakura/overflow)：
 - 每日自动检查 Overflow 和 Mirai Console 更新
 - 发现新版本时自动构建并推送镜像
 
 ## 支持架构
 
 - linux/amd64
-- linux/arm64 (实验性支持，查看 [ARM64 分支](https://github.com/sdjnmxd/overflow-docker/tree/feature/arm64-support))
+- linux/arm64 (实验性支持，查看 [ARM64 分支](https://github.com/shigemorihakura/overflow-docker/tree/feature/arm64-support))
 
 ## 问题反馈
 
