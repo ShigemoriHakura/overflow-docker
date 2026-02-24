@@ -2,7 +2,7 @@ version: '3'
 
 services:
   overflow:
-    image: sdjnmxd/overflow:latest
+    image: shigemorihakura/overflow:latest
     container_name: overflow
     restart: unless-stopped
     environment:
@@ -44,6 +44,9 @@ services:
       - ./config:/app/overflow/config
       - ./data:/app/overflow/data
       - ./logs:/app/overflow/logs
+      - ./plugins:/app/overflow/plugins
+      - ./plugin-libraries:/app/overflow/plugin-libraries
+      - ./plugin-shared-libraries:/app/overflow/plugin-shared-libraries
 
 volumes:
   bots:
