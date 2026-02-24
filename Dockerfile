@@ -1,16 +1,16 @@
 FROM eclipse-temurin:17-jdk-jammy
 
 # 添加镜像标签
-LABEL maintainer="sdjnmxd <sdjnmxd@users.noreply.github.com>"
+LABEL maintainer="shirosaki <ShigemoriHakura@users.noreply.github.com>"
 LABEL org.opencontainers.image.title="Overflow Docker"
 LABEL org.opencontainers.image.description="Overflow 的 Docker 容器化部署版本"
 LABEL org.opencontainers.image.version="latest"
-LABEL org.opencontainers.image.authors="sdjnmxd"
-LABEL org.opencontainers.image.url="https://github.com/sdjnmxd/overflow-docker"
-LABEL org.opencontainers.image.source="https://github.com/sdjnmxd/overflow-docker"
-LABEL org.opencontainers.image.documentation="https://github.com/sdjnmxd/overflow-docker#readme"
+LABEL org.opencontainers.image.authors="shirosaki"
+LABEL org.opencontainers.image.url="https://github.com/ShigemoriHakura/overflow-docker"
+LABEL org.opencontainers.image.source="https://github.com/ShigemoriHakura/overflow-docker"
+LABEL org.opencontainers.image.documentation="https://github.com/ShigemoriHakura/overflow-docker#readme"
 LABEL org.opencontainers.image.licenses="MIT"
-LABEL org.opencontainers.image.vendor="sdjnmxd"
+LABEL org.opencontainers.image.vendor="shirosaki"
 LABEL org.opencontainers.image.base.name="eclipse-temurin:17-jdk-jammy"
 
 # 设置环境变量
@@ -27,6 +27,7 @@ RUN apt-get update && apt-get install -y \
     wget \
     curl \
     jq \
+    libgl1-mesa-glx \
     && rm -rf /var/lib/apt/lists/* \
     && wget https://github.com/jwilder/dockerize/releases/download/$DOCKERIZE_VERSION/dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz \
     && tar -C /usr/local/bin -xzvf dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz \
@@ -35,7 +36,6 @@ RUN apt-get update && apt-get install -y \
 # 创建目录结构
 RUN mkdir -p overflow/content \
     overflow/plugins \
-    overflow/config/net.mamoe.mirai-api-http \
     overflow/plugin-libraries \
     overflow/plugin-shared-libraries \
     overflow/bots \
@@ -43,9 +43,7 @@ RUN mkdir -p overflow/content \
     overflow/logs
 
 # 复制配置模板和文档
-COPY config/net.mamoe.mirai-api-http/setting.yml.tmpl overflow/config/net.mamoe.mirai-api-http/
 COPY overflow.json.tmpl overflow/overflow.json.tmpl
-COPY README.md LICENSE ./
 COPY start.sh overflow/
 
 # 设置工作目录和权限
@@ -79,13 +77,6 @@ RUN cd content \
     && wget --no-check-certificate --progress=bar:force:noscroll \
        "${MAVEN_REPO}/net/mamoe/mirai-console-terminal/${MIRAI_VERSION}/mirai-console-terminal-${MIRAI_VERSION}-all.jar"
 
-# 下载插件
-RUN cd plugins \
-    && LATEST_TAG=$(curl -s https://api.github.com/repos/project-mirai/mirai-api-http/releases/latest | jq -r '.tag_name') \
-    && echo "检测到 mirai-api-http 最新版本 tag: ${LATEST_TAG}" \
-    && wget --no-check-certificate --progress=bar:force:noscroll \
-       "https://github.com/project-mirai/mirai-api-http/releases/download/${LATEST_TAG}/mirai-api-http-${LATEST_TAG#v}.mirai2.jar"
-
 # 预热依赖
 RUN java -Doverflow.skip-token-security-check=I_KNOW_WHAT_I_AM_DOING ${JAVA_OPTS:-} -cp "./content/*" net.mamoe.mirai.console.terminal.MiraiConsoleTerminalLoader 2>&1 | tee /tmp/mirai.log & \
     MIRAI_PID=$! && \
@@ -104,7 +95,7 @@ RUN java -Doverflow.skip-token-security-check=I_KNOW_WHAT_I_AM_DOING ${JAVA_OPTS
     echo "依赖预热完成"
 
 # 配置数据卷和端口
-VOLUME ["/app/overflow/bots", "/app/overflow/config", "/app/overflow/data", "/app/overflow/logs"]
+VOLUME ["/app/overflow/bots", "/app/overflow/config", "/app/overflow/data", "/app/overflow/logs", "/app/overflow/plugins", "/app/overflow/plugin-libraries", "/app/overflow/plugin-shared-libraries"]
 EXPOSE 7827
 
 CMD ["./start.sh"]
