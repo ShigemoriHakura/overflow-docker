@@ -43,4 +43,4 @@ jobs:
           password: ${{ secrets.DOCKERHUB_TOKEN }}
           repository: ${{ vars.DOCKERHUB_USERNAME }}/overflow
           readme-filepath: ./README.md
-          enable-url-completion: true 
+          enable-url-completion: false 
