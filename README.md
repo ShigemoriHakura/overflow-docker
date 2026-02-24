@@ -3,6 +3,7 @@
 [![Docker Pulls](https://img.shields.io/docker/pulls/sdjnmxd/overflow)](https://hub.docker.com/r/sdjnmxd/overflow) [![Docker Stars](https://img.shields.io/docker/stars/sdjnmxd/overflow)](https://hub.docker.com/r/sdjnmxd/overflow) [![Docker Image Size](https://img.shields.io/docker/image-size/sdjnmxd/overflow/latest)](https://hub.docker.com/r/sdjnmxd/overflow) [![Docker Image CI/CD](https://github.com/sdjnmxd/overflow-docker/actions/workflows/docker-publish.yml/badge.svg)](https://github.com/sdjnmxd/overflow-docker/actions/workflows/docker-publish.yml) [![GitHub Stars](https://img.shields.io/github/stars/sdjnmxd/overflow-docker.svg?logo=github)](https://github.com/sdjnmxd/overflow-docker) [![GitHub License](https://img.shields.io/github/license/sdjnmxd/overflow-docker)](https://github.com/sdjnmxd/overflow-docker/blob/main/LICENSE) [![GitHub last commit](https://img.shields.io/github/last-commit/sdjnmxd/overflow-docker)](https://github.com/sdjnmxd/overflow-docker/commits/main)
 
 这是 [Overflow](https://github.com/MrXiaoM/Overflow) 的 Docker 部署配置，提供了一个开箱即用的 Mirai Console + Overflow 容器化部署方案。
+本fork主要将plugins等目录引出，并且预安装libgl依赖
 
 > 🧪 **实验性功能**
 >
